@@ -2,6 +2,8 @@ package com.emplk.sharedflow_demo
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.emplk.sharedflow_demo.databinding.ActivityMainBinding
@@ -25,9 +27,7 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.viewEventLiveData.observeEvent(this) { event ->
             when (event) {
-                is MainViewEvent.DisplayText -> {
-                    binding.textView.visibility = View.VISIBLE
-                }
+                is MainViewEvent.DisplayText -> Toast.makeText(this, "Here it is: ⌚", LENGTH_LONG).show()
             }
         }
     }

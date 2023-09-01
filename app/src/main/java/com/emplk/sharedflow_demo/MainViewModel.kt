@@ -13,29 +13,15 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor() : ViewModel() {
 
-    private val hasButtonBeenClickedMutableSharedFlow = MutableSharedFlow<Boolean>()
+    private val hasButtonBeenClickedMutableSharedFlow = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
 
     val viewEventLiveData: LiveData<Event<MainViewEvent>> = liveData {
-        hasButtonBeenClickedMutableSharedFlow.collect { hasButtonBeenClicked ->
-            if (hasButtonBeenClicked) {
-                emit(
-                    Event(
-                        MainViewEvent.DisplayText
-                    )
-                )
-            }
+        hasButtonBeenClickedMutableSharedFlow.collect {
+            emit(Event(MainViewEvent.DisplayText))
         }
     }
 
-
     fun onButtonClicked() {
-        /*   tryEmit (non-blocking) ne marche pas dans ce cas...
-             sauf si on met le replay à 1*/
-        hasButtonBeenClickedMutableSharedFlow.tryEmit(true)
-
-        //    ça fonctionne très bien avec emit par contre, pas besoin de replay
-      /*  viewModelScope.launch {
-            hasButtonBeenClickedMutableSharedFlow.emit(true)
-        }*/
+        hasButtonBeenClickedMutableSharedFlow.tryEmit(Unit)
     }
 }
